@@ -1,6 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using SocialNetworkAnalyser.Components;
 using SocialNetworkAnalyser.Data;
+using SocialNetworkAnalyser.Services;
+using SocialNetworkAnalyser.Services.Interfaces;
+using SocialNetworkAnalyser.Services.Repositories;
+using SocialNetworkAnalyser.Services.Services;
 
 namespace SocialNetworkAnalyser
 {
@@ -19,6 +23,15 @@ namespace SocialNetworkAnalyser
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(connectionString));
+
+            // Register AutoMapper
+            builder.Services.AddAutoMapper(typeof(MappingProfile));
+
+            // Register your custom services and repositories here
+            builder.Services.AddScoped<IDatasetRepository, DatasetRepository>();
+            builder.Services.AddScoped<IFriendshipRepository, FriendshipRepository>();
+            builder.Services.AddScoped<IDatasetService, DatasetService>();
+            builder.Services.AddScoped<IDatasetImportJob, DatasetImportJob>();
 
             var app = builder.Build();
 

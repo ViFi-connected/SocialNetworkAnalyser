@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations.Schema;
+using SocialNetworkAnalyser.Data.Entities;
 
 namespace SocialNetworkAnalyser.Data
 {
@@ -18,34 +18,5 @@ namespace SocialNetworkAnalyser.Data
                 .WithMany(d => d.Friendships)
                 .HasForeignKey(f => f.DatasetId);
         }
-    }
-
-
-    public class Friendship
-    {
-        public int Id { get; set; }
-        
-        public uint User1Id { get; set; }
-        
-        public uint User2Id { get; set; }
-        
-        public int DatasetId { get; set; }
-
-        [ForeignKey(nameof(DatasetId))]
-        public required Dataset Dataset { get; set; }
-    }
-
-    public class Dataset
-    {
-        public int Id { get; set; }
-
-        public required string Name { get; set; }
-
-        public ushort UserCount { get; set; }
-
-        public float AvgFriendshipPerUserCount { get; set; }
-
-        // Navigation property to represent the relationship
-        public ICollection<Friendship> Friendships { get; set; } = [];
     }
 }

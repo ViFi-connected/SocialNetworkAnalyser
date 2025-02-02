@@ -1,0 +1,58 @@
+﻿@page "/stats/{datasetId:int}"
+@using SocialNetworkAnalyser.Services
+@using SocialNetworkAnalyser.Services.Dtos
+@using SocialNetworkAnalyser.Services.Interfaces
+@inject IDatasetService DatasetService
+@inject NavigationManager Navigation
+@inject IJSRuntime JSRuntime
+
+<PageTitle>Friendship Statistics</PageTitle>
+
+<div class="container">
+	<div class="row">
+		<div class="col">
+			<div class="card">
+				<div class="card-header">
+					<h5 class="card-title">Friendship Statistics</h5>
+				</div>
+				<div class="card-body">
+					@if (stats == null)
+					{
+						<p>Loading...</p>
+					}
+					else
+					{
+						<div class="mb-3">
+							<h6>Dataset Name:</h6>
+							<p>@stats.Name</p>
+						</div>
+						<div class="mb-3">
+							<h6>Number of Users:</h6>
+							<p>@stats.UserCount</p>
+						</div>
+						<div class="mb-3">
+							<h6>Average Number of Friendships per User:</h6>
+							<p>@stats.AvgFriendshipPerUserCount</p>
+						</div>
+						<button class="btn btn-primary" @onclick="BackToIndex">Back to Datasets</button>
+					}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+@code {
+	private void BackToIndex()
+	{
+		Navigation.NavigateTo("/");
+	}
+
+	[Parameter] public int datasetId { get; set; }
+	private DatasetStatsDto stats;
+
+	protected override async Task OnInitializedAsync()
+	{
+		stats = await DatasetService.GetDatasetStatsAsync(datasetId);
+	}
+}

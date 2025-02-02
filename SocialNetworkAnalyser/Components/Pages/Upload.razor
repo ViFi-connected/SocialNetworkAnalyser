@@ -1,0 +1,74 @@
+﻿@page "/upload"
+@using SocialNetworkAnalyser.Services
+@using Microsoft.AspNetCore.Components.Forms
+@using SocialNetworkAnalyser.Services.Interfaces
+@inject NavigationManager Navigation
+@inject IDatasetService DatasetService
+@inject IJSRuntime JSRuntime
+
+<PageTitle>Upload Dataset</PageTitle>
+
+<div class="container">
+	<div class="row">
+		<div class="col">
+			<div class="card">
+				<div class="card-header">
+					<h5 class="card-title">Upload Dataset</h5>
+				</div>
+				<div class="card-body">
+					<div class="mb-3">
+						<label for="datasetName" class="form-label">Dataset Name:</label>
+						<input type="text" id="datasetName" class="form-control" @bind="datasetName" placeholder="Enter dataset name" />
+					</div>
+
+					<div class="mb-3">
+						<label for="fileInput" class="form-label">Select File:</label>
+						<InputFile OnChange="HandleFileSelected" @ref="inputFile" class="form-control" />
+					</div>
+
+					<button @onclick="UploadFile" class="btn btn-primary">Upload</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+@code {
+	private string? datasetName;
+	private IBrowserFile? file;
+	private InputFile? inputFile;
+
+	private void HandleFileSelected(InputFileChangeEventArgs e)
+	{
+		file = e.File;
+		if (file != null && file.ContentType != "text/plain")
+		{
+			JSRuntime.InvokeVoidAsync("alert", "Please select a valid .txt file.");
+			file = null;
+		}
+	}
+
+	private async Task UploadFile()
+	{
+		if (string.IsNullOrWhiteSpace(datasetName))
+		{
+			await JSRuntime.InvokeVoidAsync("alert", "Please enter a dataset name.");
+			return;
+		}
+
+		if (file == null)
+		{
+			await JSRuntime.InvokeVoidAsync("alert", "Please select a file to upload.");
+			return;
+		}
+
+		var maxAllowedSize = 1024 * 1024; // 1MB
+		using var stream = file.OpenReadStream(maxAllowedSize);
+		using var reader = new StreamReader(stream);
+		var content = await reader.ReadToEndAsync();
+		var lines = content.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+
+		await DatasetService.ProcessDatasetAsync(lines.ToList(), datasetName);
+		Navigation.NavigateTo("/");
+	}
+}
