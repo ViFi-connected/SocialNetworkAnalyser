@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocialNetworkAnalyser", "So
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocialNetworkAnalyser.Client", "SocialNetworkAnalyser.Client\SocialNetworkAnalyser.Client.csproj", "{61EEDA5E-259E-4654-90C3-59171B37362F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocialNetworkAnalyser.Data", "SocialNetworkAnalyser.Data\SocialNetworkAnalyser.Data.csproj", "{2CF834A2-EDE8-4321-9D1D-D05653BA52A3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{61EEDA5E-259E-4654-90C3-59171B37362F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{61EEDA5E-259E-4654-90C3-59171B37362F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{61EEDA5E-259E-4654-90C3-59171B37362F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2CF834A2-EDE8-4321-9D1D-D05653BA52A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2CF834A2-EDE8-4321-9D1D-D05653BA52A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2CF834A2-EDE8-4321-9D1D-D05653BA52A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2CF834A2-EDE8-4321-9D1D-D05653BA52A3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

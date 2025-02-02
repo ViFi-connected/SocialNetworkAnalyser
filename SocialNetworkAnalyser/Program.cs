@@ -1,5 +1,6 @@
-using SocialNetworkAnalyser.Client.Pages;
+using Microsoft.EntityFrameworkCore;
 using SocialNetworkAnalyser.Components;
+using SocialNetworkAnalyser.Data;
 
 namespace SocialNetworkAnalyser
 {
@@ -14,7 +15,19 @@ namespace SocialNetworkAnalyser
                 .AddInteractiveServerComponents()
                 .AddInteractiveWebAssemblyComponents();
 
+            // Register the DbContext with the connection string
+            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+            builder.Services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseSqlServer(connectionString));
+
             var app = builder.Build();
+
+            // Ensure database is created and migrations are applied
+            using (var scope = app.Services.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                dbContext.Database.Migrate();
+            }
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())

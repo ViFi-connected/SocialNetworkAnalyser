@@ -8,7 +8,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SocialNetworkAnalyser.Client\SocialNetworkAnalyser.Client.csproj" />
+    <ProjectReference Include="..\SocialNetworkAnalyser.Data\SocialNetworkAnalyser.Data.csproj" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="9.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
 </Project>
