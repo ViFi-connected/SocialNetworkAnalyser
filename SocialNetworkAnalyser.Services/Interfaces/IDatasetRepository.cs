@@ -9,5 +9,7 @@ namespace SocialNetworkAnalyser.Shared.Interfaces
         Task AddAsync(Dataset dataset);
         Task UpdateAsync(Dataset dataset);
         Task DeleteAsync(int id);
+        Task<bool> IsDatasetNameTakenAsync(string datasetName);
+
     }
 }

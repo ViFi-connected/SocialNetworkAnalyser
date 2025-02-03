@@ -1,58 +1,138 @@
 ﻿@page "/stats/{datasetId:int}"
+@using SocialNetworkAnalyser.Data.Entities
 @using SocialNetworkAnalyser.Shared
-@using SocialNetworkAnalyser.Shared.Dtos
 @using SocialNetworkAnalyser.Shared.Interfaces
+@using SocialNetworkAnalyser.Shared.Repositories
 @inject IDatasetService DatasetService
+@inject IDatasetRepository DatasetRepository
 @inject NavigationManager Navigation
 @inject IJSRuntime JSRuntime
 
-<PageTitle>Friendship Statistics</PageTitle>
+<PageTitle>Dataset Statistics</PageTitle>
 
 <div class="container">
-	<div class="row">
-		<div class="col">
-			<div class="card">
-				<div class="card-header">
-					<h5 class="card-title">Friendship Statistics</h5>
-				</div>
-				<div class="card-body">
-					@if (stats == null)
-					{
-						<p>Loading...</p>
-					}
-					else
-					{
-						<div class="mb-3">
-							<h6>Dataset Name:</h6>
-							<p>@stats.Name</p>
-						</div>
-						<div class="mb-3">
-							<h6>Number of Users:</h6>
-							<p>@stats.UserCount</p>
-						</div>
-						<div class="mb-3">
-							<h6>Average Number of Friendships per User:</h6>
-							<p>@stats.AvgFriendshipPerUserCount</p>
-						</div>
-						<button class="btn btn-primary" @onclick="BackToIndex">Back to Datasets</button>
-					}
-				</div>
-			</div>
-		</div>
-	</div>
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">Dataset Statistics</h5>
+                </div>
+                <div class="card-body">
+                    @if (dataset == null)
+                    {
+                        <p>Loading...</p>
+                    }
+                    else
+                    {
+                        <div class="mb-3">
+                            <h6>Dataset Name:</h6>
+                            <div class="d-flex align-items-center">
+                                <p class="mb-0">@dataset.Name</p>
+                                <button class="btn btn-link ms-2" @onclick="ShowEditInput">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                            </div>
+                            @if (isEditing)
+                            {
+                                <input type="text" @bind="updatedDatasetName" class="form-control mt-2" placeholder="Enter new dataset name" />
+                                <button class="btn btn-success mt-2" @onclick="UpdateDataset">Save</button>
+                                <button class="btn btn-secondary mt-2 ms-2" @onclick="CancelEdit">Cancel</button>
+                            }
+                            @if (!string.IsNullOrEmpty(updateMessage))
+                            {
+                                <div class="alert @updateMessageClass mt-2">@updateMessage</div>
+                            }
+                        </div>
+                        <div class="mb-3">
+                            <h6>Imported At:</h6>
+                            <p>@dataset.CreatedAt.ToLocalTime().ToString("g")</p>
+                        </div>
+                        <div class="mb-3">
+                            <h6>Number of Users:</h6>
+                            <p>@dataset.UserCount</p>
+                        </div>
+                        <div class="mb-3">
+                            <h6>Average Number of Friendships per User:</h6>
+                            <p>@dataset.AvgFriendshipPerUserCount.ToString("F1")</p>
+                        </div>
+
+                        <button class="btn btn-danger ms-2" @onclick="DeleteDataset">Delete Dataset</button>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 @code {
-	private void BackToIndex()
-	{
-		Navigation.NavigateTo("/");
-	}
+    private string updatedDatasetName = string.Empty;
+    private string updateMessage = string.Empty;
+    private string updateMessageClass = string.Empty;
+    private bool isEditing = false;
 
-	[Parameter] public int datasetId { get; set; }
-	private DatasetStatsDto stats;
+    [Parameter] public int datasetId { get; set; }
+    private Dataset dataset;
 
-	protected override async Task OnInitializedAsync()
-	{
-		stats = await DatasetService.GetDatasetStatsAsync(datasetId);
-	}
+    protected override async Task OnInitializedAsync()
+    {
+        dataset = await DatasetRepository.GetAsync(datasetId);
+    }
+
+    private void ShowEditInput()
+    {
+        updatedDatasetName = dataset.Name;
+        isEditing = true;
+    }
+
+    private void CancelEdit()
+    {
+        isEditing = false;
+        updatedDatasetName = string.Empty;
+        updateMessage = string.Empty;
+        updateMessageClass = string.Empty;
+    }
+
+    private async Task UpdateDataset()
+    {
+        if (string.IsNullOrWhiteSpace(updatedDatasetName))
+        {
+            updateMessage = "Dataset name cannot be empty.";
+            updateMessageClass = "alert-danger";
+            return;
+        }
+
+        // Check if the dataset name is unique
+        if (await DatasetRepository.IsDatasetNameTakenAsync(updatedDatasetName))
+        {
+            updateMessage = "Dataset name already exists. Please choose a different name.";
+            updateMessageClass = "alert-danger";
+            return;
+        }
+
+        dataset.Name = updatedDatasetName;
+        try
+        {
+            await DatasetRepository.UpdateAsync(dataset);
+            dataset = await DatasetRepository.GetAsync(datasetId);
+            updateMessage = "Dataset name updated successfully.";
+            updateMessageClass = "alert-info";
+        }
+        catch (InvalidOperationException ex)
+        {
+            updateMessage = ex.Message;
+            updateMessageClass = "alert-danger";
+        }
+        updatedDatasetName = string.Empty;
+        isEditing = false;
+    }
+
+    private async Task DeleteDataset()
+    {
+        var confirmed = await JSRuntime.InvokeAsync<bool>("confirm", "Are you sure you want to delete this dataset?");
+        if (confirmed)
+        {
+            await DatasetRepository.DeleteAsync(datasetId);
+            Navigation.NavigateTo("/");
+        }
+    }
 }

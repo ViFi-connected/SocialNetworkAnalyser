@@ -26,9 +26,6 @@ namespace SocialNetworkAnalyser
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(connectionString));
 
-            // Register AutoMapper
-            builder.Services.AddAutoMapper(typeof(MappingProfile));
-
             // Register your custom services and repositories here
             builder.Services.AddScoped<IDatasetRepository, DatasetRepository>();
             builder.Services.AddScoped<IFriendshipRepository, FriendshipRepository>();

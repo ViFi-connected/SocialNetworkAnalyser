@@ -1,55 +1,66 @@
 ﻿@page "/"
+@using SocialNetworkAnalyser.Data.Entities
 @using SocialNetworkAnalyser.Shared
-@using SocialNetworkAnalyser.Shared.Dtos
 @using SocialNetworkAnalyser.Shared.Interfaces
 @inject IDatasetService DatasetService
+@inject IDatasetRepository DatasetRepository
 @inject NavigationManager Navigation
 
-<PageTitle>Available Datasets</PageTitle>
+<PageTitle>Datasets</PageTitle>
 
 <div class="container">
-    <div class="row">
-        <div class="col">
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="card-title">Available Datasets</h5>
-                </div>
-                <div class="card-body">
-                    @if (datasets == null)
-                    {
-                        <p>Loading...</p>
-                    }
-                    else if (!datasets.Any())
-                    {
-                        <p>No datasets available.</p>
-                    }
-                    else
-                    {
-                        <ul class="list-group">
-                            @foreach (var dataset in datasets)
-                            {
-                                <li class="list-group-item list-group-item-action" @onclick="() => ViewStats(dataset.Id)" style="cursor: pointer;">
-                                    @dataset.Name
-                                </li>
-                            }
-                        </ul>
-                    }
-                </div>
-            </div>
-        </div>
-    </div>
+	<div class="row">
+		<div class="col">
+			<div class="card">
+				<div class="card-header">
+					<h5 class="card-title">Available Datasets</h5>
+				</div>
+				<div class="card-body">
+					@if (datasets == null)
+					{
+						<p>Loading...</p>
+					}
+					else if (!datasets.Any())
+					{
+						<p>No datasets available.</p>
+					}
+					else
+					{
+						<div class="row">
+							@foreach (var dataset in datasets)
+							{
+								<div class="col-md-4 mb-3">
+									<div class="card h-100">
+										<div class="card-body">
+											<h5 class="card-title">@dataset.Name</h5>
+											<p class="card-text">
+												<strong>Created At:</strong> @dataset.CreatedAt.ToString("g")<br />
+												<strong>Number of Users:</strong> @dataset.UserCount<br />
+												<strong>Average Friendships per User:</strong> @dataset.AvgFriendshipPerUserCount.ToString("F1")
+											</p>
+											<button class="btn btn-primary" @onclick="() => ViewDetail(dataset.Id)">View</button>
+										</div>
+									</div>
+								</div>
+							}
+						</div>
+					}
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 
 @code {
-    private List<DatasetDto>? datasets;
+	private List<Dataset>? datasets;
 
-    protected override async Task OnInitializedAsync()
-    {
-        datasets = await DatasetService.GetAllDatasetsAsync();
-    }
+	protected override async Task OnInitializedAsync()
+	{
+		datasets = await DatasetRepository.GetAllAsync();
+	}
 
-    private void ViewStats(int datasetId)
-    {
-        Navigation.NavigateTo($"/stats/{datasetId}");
-    }
+	private void ViewDetail(int datasetId)
+	{
+		Navigation.NavigateTo($"/stats/{datasetId}");
+	}
 }

@@ -21,7 +21,7 @@ namespace SocialNetworkAnalyser.Shared.Repositories
 
         public async Task<List<Dataset>> GetAllAsync()
         {
-            return await _context.Datasets.ToListAsync();
+            return await _context.Datasets.OrderDescending().ToListAsync();
         }
 
         public async Task AddAsync(Dataset dataset)
@@ -32,8 +32,14 @@ namespace SocialNetworkAnalyser.Shared.Repositories
 
         public async Task UpdateAsync(Dataset dataset)
         {
-            _context.Datasets.Update(dataset);
-            await _context.SaveChangesAsync();
+            var existingDataset = await _context.Datasets.FindAsync(dataset.Id);
+            if (existingDataset != null)
+            {
+                existingDataset.Name = dataset.Name;
+
+                _context.Datasets.Update(existingDataset);
+                await _context.SaveChangesAsync();
+            }
         }
 
         public async Task DeleteAsync(int id)
@@ -44,6 +50,11 @@ namespace SocialNetworkAnalyser.Shared.Repositories
                 _context.Datasets.Remove(dataset);
                 await _context.SaveChangesAsync();
             }
+        }
+
+        public async Task<bool> IsDatasetNameTakenAsync(string datasetName)
+        {
+            return await _context.Datasets.AnyAsync(d => d.Name == datasetName);
         }
     }
 }
