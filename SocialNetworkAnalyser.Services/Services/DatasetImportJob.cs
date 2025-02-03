@@ -7,11 +7,13 @@ namespace SocialNetworkAnalyser.Shared.Services
     {
         private readonly IFriendshipRepository _friendshipRepository;
         private readonly IDatasetRepository _datasetRepository;
+        private readonly JobStateService _jobStateService;
 
-        public DatasetImportJob(IFriendshipRepository friendshipRepository, IDatasetRepository datasetRepository)
+        public DatasetImportJob(IFriendshipRepository friendshipRepository, IDatasetRepository datasetRepository, JobStateService jobStateService)
         {
             _friendshipRepository = friendshipRepository;
             _datasetRepository = datasetRepository;
+            _jobStateService = jobStateService;
         }
 
         public void Execute(List<string> lines, string datasetName)
@@ -20,6 +22,8 @@ namespace SocialNetworkAnalyser.Shared.Services
             {
                 try
                 {
+                    _jobStateService.Uploading = true;
+
                     var dataset = new Dataset
                     {
                         Name = datasetName,
@@ -63,6 +67,10 @@ namespace SocialNetworkAnalyser.Shared.Services
                 catch (Exception ex)
                 {
                     Console.WriteLine($"Error in {nameof(DatasetImportJob)}: {ex.Message}");
+                }
+                finally
+                {
+                    _jobStateService.Uploading = false;
                 }
             });
         }

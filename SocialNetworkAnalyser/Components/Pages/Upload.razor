@@ -2,9 +2,11 @@
 @using SocialNetworkAnalyser.Shared
 @using Microsoft.AspNetCore.Components.Forms
 @using SocialNetworkAnalyser.Shared.Interfaces
+@using SocialNetworkAnalyser.Shared.Services
 @inject NavigationManager Navigation
 @inject IDatasetService DatasetService
 @inject IJSRuntime JSRuntime
+@inject JobStateService JobStateService
 
 <PageTitle>Upload Dataset</PageTitle>
 
@@ -27,6 +29,13 @@
 					</div>
 
 					<button @onclick="UploadFile" class="btn btn-primary">Upload</button>
+
+					@if (JobStateService.Uploading)
+					{
+						<div class="mt-3">
+							<Progress Indeterminate />
+						</div>
+					}
 				</div>
 			</div>
 		</div>
@@ -37,6 +46,11 @@
 	private string? datasetName;
 	private IBrowserFile? file;
 	private InputFile? inputFile;
+
+	protected override void OnInitialized()
+	{
+		JobStateService.OnUploadingChanged += UpdateUploadingState;
+	}
 
 	private void HandleFileSelected(InputFileChangeEventArgs e)
 	{
@@ -69,6 +83,13 @@
 		var lines = content.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
 
 		await DatasetService.ProcessDatasetAsync(lines.ToList(), datasetName);
-		Navigation.NavigateTo("/");
+	}
+
+	private void UpdateUploadingState(object? sender, EventArgs e)
+	{
+		_ = InvokeAsync(() =>
+		{
+			StateHasChanged();
+		});
 	}
 }

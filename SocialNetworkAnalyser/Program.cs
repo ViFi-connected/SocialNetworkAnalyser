@@ -1,3 +1,6 @@
+using Blazorise;
+using Blazorise.Bootstrap5;
+using Blazorise.Icons.FontAwesome;
 using Microsoft.EntityFrameworkCore;
 using SocialNetworkAnalyser.Components;
 using SocialNetworkAnalyser.Data;
@@ -31,6 +34,16 @@ namespace SocialNetworkAnalyser
             builder.Services.AddScoped<IFriendshipRepository, FriendshipRepository>();
             builder.Services.AddScoped<IDatasetService, DatasetService>();
             builder.Services.AddScoped<IDatasetImportJob, DatasetImportJob>();
+
+            builder.Services.AddSingleton<JobStateService>();
+
+            builder.Services
+                .AddBlazorise(options =>
+                {
+                    options.Immediate = true;
+                })
+                .AddBootstrap5Providers()
+                .AddFontAwesomeIcons();
 
             var app = builder.Build();
 
