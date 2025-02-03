@@ -1,9 +1,9 @@
 using AutoMapper;
 using SocialNetworkAnalyser.Data.Entities;
-using SocialNetworkAnalyser.Services.Dtos;
-using SocialNetworkAnalyser.Services.Interfaces;
+using SocialNetworkAnalyser.Shared.Dtos;
+using SocialNetworkAnalyser.Shared.Interfaces;
 
-namespace SocialNetworkAnalyser.Services.Services;
+namespace SocialNetworkAnalyser.Shared.Services;
 
 public class DatasetService(IDatasetRepository datasetRepository, IDatasetImportJob datasetImportJob, IMapper mapper) : IDatasetService
 {

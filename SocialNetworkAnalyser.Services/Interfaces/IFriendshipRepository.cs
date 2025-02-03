@@ -1,6 +1,6 @@
 using SocialNetworkAnalyser.Data.Entities;
 
-namespace SocialNetworkAnalyser.Services.Interfaces
+namespace SocialNetworkAnalyser.Shared.Interfaces
 {
     public interface IFriendshipRepository
     {

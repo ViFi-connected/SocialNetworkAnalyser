@@ -1,8 +1,7 @@
 using SocialNetworkAnalyser.Data.Entities;
-using SocialNetworkAnalyser.Services.Interfaces;
-using SocialNetworkAnalyser.Services.Repositories;
+using SocialNetworkAnalyser.Shared.Interfaces;
 
-namespace SocialNetworkAnalyser.Services.Services
+namespace SocialNetworkAnalyser.Shared.Services
 {
     public class DatasetImportJob : IDatasetImportJob
     {

@@ -1,10 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using SocialNetworkAnalyser.Components;
 using SocialNetworkAnalyser.Data;
-using SocialNetworkAnalyser.Services;
-using SocialNetworkAnalyser.Services.Interfaces;
-using SocialNetworkAnalyser.Services.Repositories;
-using SocialNetworkAnalyser.Services.Services;
+using SocialNetworkAnalyser.Shared;
+using SocialNetworkAnalyser.Shared.Interfaces;
+using SocialNetworkAnalyser.Shared.Repositories;
+using SocialNetworkAnalyser.Shared.Services;
 
 namespace SocialNetworkAnalyser
 {
@@ -16,8 +16,7 @@ namespace SocialNetworkAnalyser
 
             // Add services to the container.
             builder.Services.AddRazorComponents()
-                .AddInteractiveServerComponents()
-                .AddInteractiveWebAssemblyComponents();
+                .AddInteractiveServerComponents();
 
             // Register the DbContext with the connection string
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -56,9 +55,7 @@ namespace SocialNetworkAnalyser
 
             app.MapStaticAssets();
             app.MapRazorComponents<App>()
-                .AddInteractiveServerRenderMode()
-                .AddInteractiveWebAssemblyRenderMode()
-                .AddAdditionalAssemblies(typeof(Client._Imports).Assembly);
+                .AddInteractiveServerRenderMode();
 
             app.Run();
         }

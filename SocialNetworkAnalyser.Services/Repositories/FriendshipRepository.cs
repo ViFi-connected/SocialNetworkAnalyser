@@ -1,9 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using SocialNetworkAnalyser.Data;
 using SocialNetworkAnalyser.Data.Entities;
-using SocialNetworkAnalyser.Services.Interfaces;
+using SocialNetworkAnalyser.Shared.Interfaces;
 
-namespace SocialNetworkAnalyser.Services.Repositories
+namespace SocialNetworkAnalyser.Shared.Repositories
 {
     public class FriendshipRepository : IFriendshipRepository
     {

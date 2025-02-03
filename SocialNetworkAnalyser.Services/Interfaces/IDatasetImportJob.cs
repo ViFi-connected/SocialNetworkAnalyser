@@ -1,6 +1,4 @@
-using System.Collections.Generic;
-
-namespace SocialNetworkAnalyser.Services.Interfaces
+namespace SocialNetworkAnalyser.Shared.Interfaces
 {
     public interface IDatasetImportJob
     {

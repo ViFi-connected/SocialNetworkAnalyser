@@ -1,4 +1,4 @@
-namespace SocialNetworkAnalyser.Services.Dtos
+namespace SocialNetworkAnalyser.Shared.Dtos
 {
     public class FriendshipDto
     {

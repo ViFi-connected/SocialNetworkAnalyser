@@ -7,9 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SocialNetworkAnalyser.Client\SocialNetworkAnalyser.Client.csproj" />
     <ProjectReference Include="..\SocialNetworkAnalyser.Data\SocialNetworkAnalyser.Data.csproj" />
-    <ProjectReference Include="..\SocialNetworkAnalyser.Services\SocialNetworkAnalyser.Services.csproj" />
+    <ProjectReference Include="..\SocialNetworkAnalyser.Services\SocialNetworkAnalyser.Shared.csproj" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="9.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.1">
       <PrivateAssets>all</PrivateAssets>

@@ -1,8 +1,8 @@
 using AutoMapper;
 using SocialNetworkAnalyser.Data.Entities;
-using SocialNetworkAnalyser.Services.Dtos;
+using SocialNetworkAnalyser.Shared.Dtos;
 
-namespace SocialNetworkAnalyser.Services
+namespace SocialNetworkAnalyser.Shared
 {
     public class MappingProfile : Profile
     {

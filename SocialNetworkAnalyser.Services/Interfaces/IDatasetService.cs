@@ -1,6 +1,6 @@
-using SocialNetworkAnalyser.Services.Dtos;
+using SocialNetworkAnalyser.Shared.Dtos;
 
-namespace SocialNetworkAnalyser.Services.Interfaces
+namespace SocialNetworkAnalyser.Shared.Interfaces
 {
     public interface IDatasetService
     {

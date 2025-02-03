@@ -1,10 +1,6 @@
-using SocialNetworkAnalyser.Data;
 using SocialNetworkAnalyser.Data.Entities;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
-namespace SocialNetworkAnalyser.Services.Interfaces
+namespace SocialNetworkAnalyser.Shared.Interfaces
 {
     public interface IDatasetRepository
     {
